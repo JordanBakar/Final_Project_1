@@ -1,8 +1,5 @@
 import sys
-import platform
 from PySide2 import QtCore, QtGui, QtWidgets
-from PySide2.QtCore import (QCoreApplication, QPropertyAnimation, QDate, QDateTime, QMetaObject, QObject, QPoint, QRect, QSize, QTime, QUrl, Qt, QEvent)
-from PySide2.QtGui import (QBrush, QColor, QConicalGradient, QCursor, QFont, QFontDatabase, QIcon, QKeySequence, QLinearGradient, QPalette, QPainter, QPixmap, QRadialGradient)
 from PySide2.QtWidgets import *
 import pandas as pd
 
@@ -35,14 +32,13 @@ class MainWindow(QMainWindow):
             first_name = str(self.ui.lineEdit_firstName.text())
             last_name = str(self.ui.lineEdit_lastName.text())
             email_address = str(self.ui.lineEdit_emailAddress.text())
-            phone_number1 = int(self.ui.lineEdit_phoneNumber1.text())
-            phone_number2 = int(self.ui.lineEdit_phoneNumber2.text())
-            phone_number3 = int(self.ui.lineEdit_phoneNumber3.text())
+
+
+            phone_number1 = self.ui.lineEdit_phoneNumber1.text()
+            phone_number2 = self.ui.lineEdit_phoneNumber2.text()
+            phone_number3 = self.ui.lineEdit_phoneNumber3.text()
+
             job_position = self.ui.comboBox_jobPosition.currentText()
-
-            # if (len(phone_number1) > 3) or (len(phone_number2) > 3) or (len(phone_number3) > 4):
-            #     raise ValueError(self.ui.label_information.setText("*** Phone Number must be numeric, with max amounts of values inputed i.e. ###-###-#### ***"))
-
 
             display = self.ui.tableWidget_display
 
@@ -67,18 +63,59 @@ class MainWindow(QMainWindow):
             elif job_position == 9:
                 job_position = "Brand Ambassador"
 
+
             phone_number = (f'{phone_number1}-{phone_number2}-{phone_number3}')
 
             empty_list = [first_name, last_name, email_address, phone_number, job_position]
+
+            if '@'not in email_address:
+                raise ValueError
+
+            if len(phone_number1) != 3 or len(phone_number2) != 3 or len(phone_number3) != 4:
+                raise ValueError
+
+            if not phone_number1.isnumeric() or not phone_number2.isnumeric() or not phone_number3.isnumeric():
+                raise ValueError
+
 
             with open("contact_database.csv", "a", newline="") as csvfile:
                 csv_writer = csv.writer(csvfile)
                 csv_writer.writerow(empty_list)
 
+#TODO: Could use label.setHidden(True) to hide these error messages
+
         except ValueError:
-            self.ui.label_information.setText("*** Please check if you inputted the correct values. Nothing was added to the database. ***\n"
-                                              "*** First & Last Name must be letters. Emails can be Alphanumeric or non Alphanumeric. ***\n"
-                                              "*** Phone Number must be numeric, with max amounts of values inputed i.e. ###-###-#### ***")
+            if len(phone_number1) != 3 or not phone_number1.isnumeric():
+                #Make an error Label named , set label.setHidden(False), and change its text to state here is the error
+                #Below is an example
+                self.ui.lineEdit_phoneNumber1.setText("Reenter for three numbers")
+            if len(phone_number2) != 3 or not phone_number2.isnumeric():
+                #Make an error Label, set label.setHidden(False), and change its text to state here is the error
+                #Below is an example
+                self.ui.lineEdit_phoneNumber2.setText("Reenter for three numbers")
+            if len(phone_number3) != 4 or not phone_number3.isnumeric():
+                #Make an error Label, set label.setHidden(False), and change its text to state here is the error
+                #Below is an example
+                self.ui.lineEdit_phoneNumber3.setText("Reenter for four numbers")
+
+            if '@' not in email_address:
+                #Make an error Label, set label.setHidden(False), and change its text to state here is the error
+                #Below is an example
+                self.ui.lineEdit_emailAddress.setText("Please check and reenter your email adress")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -103,7 +140,6 @@ class MainWindow(QMainWindow):
         self.ui.lineEdit_phoneNumber2.setText("")
         self.ui.lineEdit_phoneNumber3.setText("")
         self.ui.comboBox_jobPosition.setCurrentIndex(-1)
-        self.ui.label_information.setText("")
 
 
 if __name__ == "__main__":
