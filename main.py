@@ -62,7 +62,7 @@ class MainWindow(QMainWindow):
 
             allowed_first_name = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'`"
             allowed_last_name = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'`"
-            allowed_email_address = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-!@#$%."
+            allowed_email_address = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-!@#$%.1234567890"
 
             if job_position == 0:
                 job_position = "Receptionist"
